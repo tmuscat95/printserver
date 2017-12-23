@@ -53,7 +53,7 @@ app.get('/gallery/:token',function(req,res){//token will be username encrypted w
   console.log(decoded);
 
   if(decoded.exp < Date.now()){
-    res.end("Token Expired! Please authenticate again");
+    res.render("auth_exp");
 
   }
 
