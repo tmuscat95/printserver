@@ -1,12 +1,9 @@
 
 <!DOCTYPE html>
-<html ng-app="authenticate" ng-controller="checkToken">
+<html>
   <head> <!--Shiboleth  21:31 21/12 https fixed-->
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/ngstorage/0.3.10/ngStorage.min.js"></script>
-    <script src="/bower_components/angular-route/angular-route.js"></script>
 
     <style>
     #form{
@@ -28,29 +25,14 @@
         <a href="https://server.local/" class="btn btn-primary btn-lg active home" role="button" aria-pressed="true">Sign in</a>
       </div>
     </div>
-  </body >
-  <script type="text/javascript">
-
-    const authServer = "https://server.local/"; //authntication server address
-    const imgServer = "https://imgserver/"; //image server address
-    const printServer = "https://printserver/";
-	//const imgServer = "https://localhost/";
-
-    window.onmessage = function(msg){
-      console.log(msg.origin);
-      if(msg.origin.substring(0,20) !== authServer.substring(0,20)||msg.origin.substring(0,20) !== imgServer.substring(0,20)){
-        console.log("Unrecognised Host Attempting to pass JWT Token");
-        return;
-      }
-      console.log("Host OK, parsing token.");
-      var data = JSON.parse(msg.data);
-      console.log("Received 3rd Party Token:" + data.thrdPrtyAuth);
-      localStorage.setItem('THRDPRTY',data.thrdPrtyAuth);
-
-    }
 
 
-    var app = angular.module('authenticate',['ngStorage']);
+    <script type="text/javascript">
+
+      const authServer = "https://server.local/"; //authntication server address
+      const imgServer = "https://imgserver/"; //image server address
+      const printServer = "https://printserver/";
+
 
     app.controller('checkToken',function($scope,$http,$localStorage){
     	console.log(localStorage.getItem('THRDPRTY'));
@@ -59,7 +41,25 @@
         window.location.href = printServer+'gallery/'+localStorage.getItem('THRDPRTY');
 
 
+      window.onmessage = function(msg){
+        console.log(msg.origin);
 
-    });
-  </script>
+        if(msg.origin.substring(0,20) !== authServer.substring(0,20)||msg.origin.substring(0,20) !== imgServer.substring(0,20)){
+          console.log("Unrecognised Host Attempting to pass JWT Token");
+          return;
+        }
+
+        console.log("Host OK, parsing token.");
+        var data = JSON.parse(msg.data);
+        console.log("Received 3rd Party Token:" + data.thrdPrtyAuth);
+        localStorage.setItem('THRDPRTY',data.thrdPrtyAuth);
+
+      }
+
+      if(localStorage.getItem('THRDPRTY')!==null)
+        window.location.href = imgServer+'gallery/'+localStorage.getItem('THRDPRTY');
+
+    </script>
+  </body >
+
 </html>
