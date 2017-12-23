@@ -53,9 +53,10 @@
     var app = angular.module('authenticate',['ngStorage']);
 
     app.controller('checkToken',function($scope,$http,$localStorage){
-    
-      if(localStorage.getItem('THRDPRTY')!==undefined)
-        window.location.href = imgServer+'gallery/'+localStorage.getItem('THRDPRTY');
+    	console.log(localStorage.getItem('THRDPRTY'));
+
+      if(localStorage.getItem('THRDPRTY')!==null)
+        window.location.href = printServer+'gallery/'+localStorage.getItem('THRDPRTY');
 
 
 
