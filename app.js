@@ -40,6 +40,10 @@ app.get('/',function(req,res){
     res.render('auth');
 });
 
+app.get('/logout',function(req,res){
+  res.render('auth_exp');
+});
+
 // app.get('/home',function(req,res){
 //   res.render('home');
 // });
