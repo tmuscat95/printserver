@@ -12,7 +12,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 const secret = 'cps3232';
 //connect to database
-mongoose.connect('mongodb://printserver:1234@imgserver:27018/usrImagesDB');
+mongoose.connect("mongodb://printserver:1234@imgserver:27018/usrImagesDB");
 console.log("Connected to usrImagesDB as user:printserver on port 27018");
 
 
