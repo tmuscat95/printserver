@@ -18,7 +18,7 @@
     <title>{{redirect}}</title>
   </head>
   <body>
-    
+
 
     <div id='form'>
       <div>
@@ -30,7 +30,7 @@
     </div>
   </body >
   <script type="text/javascript">
-    
+
     const authServer = "https://server.local/"; //authntication server address
     const imgServer = "https://imgserver/"; //image server address
     const printServer = "https://printserver/";
@@ -38,35 +38,24 @@
 
     window.onmessage = function(msg){
       console.log(msg.origin);
-      if(msg.origin.substring(0,20) !== authServer.substring(0,20)){
+      if(msg.origin.substring(0,20) !== authServer.substring(0,20)||msg.origin.substring(0,20) !== imgServer.substring(0,20)){
         console.log("Unrecognised Host Attempting to pass JWT Token");
         return;
       }
       console.log("Host OK, parsing token.");
       var data = JSON.parse(msg.data);
-      console.log("Received 3rd Party Token:" + data.token);
-      localStorage.setItem('AUTHTKN',data.token);
-      //localStorage.setItem('THRDPRTY',data.thrdPrtyAuth);
-      var prntsrvr = document.getElementById('prntsrvr').contentWindow;
-      prntsrvr.postMessage(data.thrdPrtyAuth,"*");
+      console.log("Received 3rd Party Token:" + data.thrdPrtyAuth);
+      localStorage.setItem('THRDPRTY',data.thrdPrtyAuth);
+
     }
 
 
     var app = angular.module('authenticate',['ngStorage']);
 
-    // app.config(function($routeProvider){
-    //     $routeProvider
-    //       .when("/home", {
-    //         templateUrl : "home.html"
-    //     });
-    // });
-
     app.controller('checkToken',function($scope,$http,$localStorage){
-      //console.log($localStorage.token);
-      //$scope.msg="Checking Token..";
-
-      if(localStorage.getItem('AUTHTKN')!==null)
-        window.location.href = imgServer+'gallery/'+localStorage.getItem('AUTHTKN');
+    
+      if(localStorage.getItem('THRDPRTY')!==undefined)
+        window.location.href = imgServer+'gallery/'+localStorage.getItem('THRDPRTY');
 
 
 
