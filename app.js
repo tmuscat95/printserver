@@ -68,9 +68,9 @@ app.get('/gallery/:token',function(req,res){//token will be username encrypted w
 });
 
 var credentials = {
-  ca: fs.readFileSync('imagesite-ca-chain.cert.pem'),
-  key: fs.readFileSync('imagesite.key.pem'),
-  cert: fs.readFileSync('imagesite.cert.pem'),
+  ca: fs.readFileSync('ca-chain.cert.pem'),
+  key: fs.readFileSync('printserver.key.pem'),
+  cert: fs.readFileSync('printserver.cert.pem'),
   passphrase: 'cthulhu'
 };
 
