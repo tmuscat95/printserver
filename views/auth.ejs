@@ -12,7 +12,7 @@
 
     }
     </style>
-    <title>{{redirect}}</title>
+    <title>Print Server</title>
   </head>
   <body>
 
@@ -21,6 +21,7 @@
       <div>
         <span class="glyphicon glyphicon-eye-open"></span> IMGS</a>
       </div>
+	<div><h3>Print Server</h3> </div>
       <div>
         <a href="https://server.local/" class="btn btn-primary btn-lg active home" role="button" aria-pressed="true">Sign in</a>
       </div>
@@ -32,22 +33,19 @@
       const authServer = "https://server.local/"; //authntication server address
       const imgServer = "https://imgserver/"; //image server address
       const printServer = "https://printserver/";
-
-
-    app.controller('checkToken',function($scope,$http,$localStorage){
-    	console.log(localStorage.getItem('THRDPRTY'));
-
-      if(localStorage.getItem('THRDPRTY')!==null)
-        window.location.href = printServer+'gallery/'+localStorage.getItem('THRDPRTY');
-
-
-      window.onmessage = function(msg){
-        console.log(msg.origin);
-
-        if(msg.origin.substring(0,20) !== authServer.substring(0,20)||msg.origin.substring(0,20) !== imgServer.substring(0,20)){
-          console.log("Unrecognised Host Attempting to pass JWT Token");
-          return;
-        }
+	
+			
+	if(localStorage.getItem('THRDPRTY')!==null)
+        	window.location.href = printServer+'gallery/'+localStorage.getItem('THRDPRTY');
+		
+	window.onmessage = function(msg){
+        console.log("Printserver Received Message");
+	console.log(msg.origin);
+	
+	if(!msg.origin.startsWith("https://imgserver")){
+        	console.log("Unrecognised Host Attempting to pass JWT Token");
+          	return;
+        	}
 
         console.log("Host OK, parsing token.");
         var data = JSON.parse(msg.data);
@@ -55,9 +53,11 @@
         localStorage.setItem('THRDPRTY',data.thrdPrtyAuth);
 
       }
+	
+	console.log(localStorage.getItem('THRDPRTY'));
 
-      if(localStorage.getItem('THRDPRTY')!==null)
-        window.location.href = imgServer+'gallery/'+localStorage.getItem('THRDPRTY');
+      	
+	
 
     </script>
   </body >
