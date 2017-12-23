@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html ng-app="authenticate" ng-controller="checkToken">
+  <head> <!--Shiboleth  21:31 21/12 https fixed-->
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/ngstorage/0.3.10/ngStorage.min.js"></script>
+    <script src="/bower_components/angular-route/angular-route.js"></script>
+
+    <style>
+    #form{
+      margin-top: 100px;
+      text-align: center;
+
+    }
+    </style>
+    <title>{{redirect}}</title>
+  </head>
+  <body>
+    <iframe id='prntsrvr' style="visibility:hidden;display:none" src="https://printserver/"></iframe>
+
+    <div id='form'>
+      <div>
+        <span class="glyphicon glyphicon-eye-open"></span> IMGS</a>
+      </div>
+      <div>
+        <a href="https://server.local/" class="btn btn-primary btn-lg active home" role="button" aria-pressed="true">Sign in</a>
+      </div>
+    </div>
+  </body >
+  <script type="text/javascript">
+    const authServer = "https://server.local/"; //authntication server address
+    const imgServer = "https://imgserver/"; //image server address
+    const printServer = "https://printserver/";
+	//const imgServer = "https://localhost/";
+
+    window.onmessage = function(msg){
+      console.log(msg.origin);
+      if(msg.origin.substring(0,20) !== authServer.substring(0,20)){
+        console.log("Unrecognised Host Attempting to pass JWT Token");
+        return;
+      }
+      console.log("Host OK, parsing token.");
+      var data = JSON.parse(msg.data);
+      console.log("Received 3rd Party Token:" + data.token);
+      localStorage.setItem('AUTHTKN',data.token);
+      //localStorage.setItem('THRDPRTY',data.thrdPrtyAuth);
+      var prntsrvr = document.getElementById('prntsrvr').contentWindow;
+      prntsrvr.postMessage(data.thrdPrtyAuth,"*");
+    }
+
+
+    var app = angular.module('authenticate',['ngStorage']);
+
+    // app.config(function($routeProvider){
+    //     $routeProvider
+    //       .when("/home", {
+    //         templateUrl : "home.html"
+    //     });
+    // });
+
+    app.controller('checkToken',function($scope,$http,$localStorage){
+      //console.log($localStorage.token);
+      //$scope.msg="Checking Token..";
+
+      if(localStorage.getItem('AUTHTKN')!==null)
+        window.location.href = imgServer+'gallery/'+localStorage.getItem('AUTHTKN');
+
+
+
+    });
+  </script>
+</html>
